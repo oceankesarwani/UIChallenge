@@ -258,7 +258,7 @@
             android:fontFamily="@font/playfair_display"
             android:hint="Enter your age"
             android:inputType="number"
-            android:textColor="@color/white"
+            android:textColor="?attr/colorOnBackground"
             android:textColorHint="#A4A4A4"
             android:textSize="18sp"
             android:textStyle="bold" />
