@@ -2,14 +2,16 @@ package com.example.assignment
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isEmpty
 import androidx.core.widget.addTextChangedListener
+
 
 class MainActivity : AppCompatActivity() {
     private var isVerified = false
@@ -19,8 +21,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val etName = findViewById<EditText>(R.id.etName)
         val etAge = findViewById<EditText>(R.id.etAge)
-        val btnVerify = findViewById<Button>(R.id.btnVerify)
+        val btnVerify = findViewById<ImageButton>(R.id.btnVerify)
         val tvStatus = findViewById<TextView>(R.id.tvStatus)
+        val radioGender = findViewById<RadioGroup>(R.id.gender)
+        val male = findViewById<RadioButton>(R.id.radioButton)
 
         fun resetVerification() {
             isVerified = false
@@ -48,11 +52,21 @@ class MainActivity : AppCompatActivity() {
                 etAge.error = "Enter valid age"
                 return@setOnClickListener
             }
+
+            if (radioGender.checkedRadioButtonId == -1) {
+                male.error ="gender required"
+                return@setOnClickListener
+            }else {
+                male.error = null
+            }
+
+
+
             isVerified = true
             tvStatus.text = "Verified"
             tvStatus.setTextColor(resources.getColor(android.R.color.holo_green_dark))
         }
-        val btnContinue = findViewById<Button>(R.id.btnContinue)
+        val btnContinue = findViewById<ImageButton>(R.id.btnContinue)
         btnContinue.setOnClickListener {
             if(!isVerified){
                 tvStatus.text = "Please verify first"
@@ -61,9 +75,15 @@ class MainActivity : AppCompatActivity() {
                 )
                 return@setOnClickListener
             }
+
+            val selectedId = radioGender.checkedRadioButtonId
+            val selectedRadio = findViewById<RadioButton>(selectedId)
+            val selectedText = selectedRadio.text.toString()
+
             val intent = Intent(this, SecondActivity::class.java)
             intent.putExtra("NAME", etName.text.toString().trim())
             intent.putExtra("AGE", etAge.text.toString().trim())
+            intent.putExtra("SELECTED_GENDER", selectedText)
             startActivity(intent)
         }
     }
